@@ -86,7 +86,7 @@ def createImg(number, type):
     y.sort()
     fig, ax = plt.subplots()
     ax.plot(x, y)
-    ax.set(xlabel='Fecha de consulta', ylabel='HR', title='Heart Rate Graph')
+    ax.set(xlabel='Fecha de consulta', ylabel=type, title=f'{type} Graph')
     ax.grid()
     fig.savefig(number.replace(":","_")+".png")
     return
