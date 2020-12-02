@@ -54,7 +54,7 @@ class MESSAGE(Resource):
                             to=number)
     else:
         if message_body == "hola":
-            message = f"Hola, {username}!"        
+            message = f"Hola, {username}!\nPara realizar una consulta de ritmo cardiaco escriba: 'Consulta pulso'"        
             message = client.messages.create (
                                     from_='whatsapp:+14155238886',  
                                     body=message,
