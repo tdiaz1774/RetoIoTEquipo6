@@ -54,5 +54,4 @@ def readSpo2Data(number):
     except Exception as e:
         print(f"Occurrio un error! \n{e}")
 
-
-readHRData("1")
+readHRData("whatsapp:+5215543884473")

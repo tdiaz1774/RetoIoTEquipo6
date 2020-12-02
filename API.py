@@ -4,6 +4,8 @@ from flask import Flask, request, send_file
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from twilio.rest import Client
+from matplotlib import pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 import db_connector as db
 import time
 
@@ -22,6 +24,7 @@ class MESSAGE(Resource):
 
                 
     client = Client(config.ACCOUNT_SID, config.AUTH_TOKEN)
+    ngrok_url = config.URL_NGROK
 
     exist, username = db.findUser(number) 
 
@@ -69,7 +72,7 @@ class MESSAGE(Resource):
                 message = client.messages.create (
                                         from_='whatsapp:+14155238886',  
                                         body=message,
-                                        media_url=['https://e1d59601d333.ngrok.io/image?number='+number],
+                                        media_url=[f'{ngrok_url}/image?number={number}'],
                                         to=number
                                     )
             # Si se requiere una consulta de concentracion de oxigeno
@@ -79,14 +82,14 @@ class MESSAGE(Resource):
                 message = client.messages.create (
                                         from_='whatsapp:+14155238886',  
                                         body=message,
-                                        media_url=['https://e1d59601d333.ngrok.io/image?number='+number],
+                                        media_url=[f'{ngrok_url}/image?number={number}'],
                                         to=number
                                     )     
 
 class IMAGE(Resource):
     def get(self):        
         number = request.args.get('number')
-        number = number.replace(": ","_+")        
+        number = number.replace(": ","_+")       
         print(number)
         filename = f"{number}.png"
         return send_file(filename, mimetype='image/png')
