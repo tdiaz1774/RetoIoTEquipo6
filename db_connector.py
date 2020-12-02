@@ -19,16 +19,17 @@ def findUser(number):
         sql = 'select * from Paciente where numero="%s"' % (number)
         cursorObj.execute(sql)
         rows = cursorObj.fetchall()
+        if len(rows) == 0:
+            raise Exception
         for row in rows:
             return True, row[1]
 
     except Exception as err:
         print("User does not exist in data base")
-        print(f"Error: {e}")
+        print(f"Error: {err}")
         return False, "nouserfound"
 
 
-#print(find_user("whatsapp:+525514200581"))
 
 def insertHR(number, data):
     """Insert Heart Rate into database.
@@ -37,8 +38,20 @@ def insertHR(number, data):
 
     con = sqlite3.connect('mydatabase.db')
     cursorObj = con.cursor()
-    sql = f'insert into HeartRate ("id","Numero","Data","Fecha","id_paciente") VALUES (NULL, "{number}","{data}","{datetime.now().strftime("%d/%m/%Y %H")}","{number}");'
+    sql = f'insert into HeartRate ("id","Numero","Data","Fecha","id_paciente") VALUES (NULL, "{number}","{data}","{datetime.now().strftime("%d/%m/%Y %H:%M:%S")}","{number}");'
     print(f"Data inserted into HeartRate -> {data}")
+    cursorObj.execute(sql)
+    con.commit()
+    con.close()
+
+def insertSpo2(number, data):
+    """Insert Spo2 into database.
+    insertSpo2(number: int, data: int)
+    """
+    con = sqlite3.connect('mydatabase.db')
+    cursorObj = con.cursor()
+    sql = f'insert into Spo2 ("id","Numero","Data","Fecha","id_paciente") VALUES (NULL, "{number}","{data}","{datetime.now().strftime("%d/%m/%Y %H:%M:%S")}","{number}");'
+    print(f"Data inserted into Spo2 -> {data}")
     cursorObj.execute(sql)
     con.commit()
     con.close()
@@ -70,6 +83,7 @@ def createImg(number, type):
         x.append(item[3])
         y.append(item[2])
 
+    y.sort()
     fig, ax = plt.subplots()
     ax.plot(x, y)
     ax.set(xlabel='Fecha de consulta', ylabel='HR', title='Heart Rate Graph')
@@ -77,7 +91,7 @@ def createImg(number, type):
     fig.savefig(number.replace(":","_")+".png")
     return
 
-createImg("1", "HR")
+# createImg("1", "HR")
 
 
 def checkDataBase():
@@ -85,6 +99,21 @@ def checkDataBase():
     db_check() -> bool
     """
     if os.path.isfile('mydatabase.db'):          
+        return True
+    return False
+
+
+def AddUser(numero, nombre):
+    """ Registers a new user into the data base
+    """
+    if os.path.isfile('mydatabase.db'):
+        con = sqlite3.connect('mydatabase.db')
+        cursorObj = con.cursor()
+
+        sql = f'INSERT INTO Paciente (Numero, Nombre, Apellido, Email) VALUES ("{numero}","{nombre}","-","-")'
+        cursorObj.execute(sql)
+        con.commit()
+        con.close()
         return True
     return False
 

@@ -1,2 +1,6 @@
 config.py
-config.py
+*.db
+ngrok.exe
+*.jpeg
+*.png
+__pycache__/
