@@ -128,7 +128,7 @@ def createDataBase():
     print("Primero deberas registrar tus datos \n")
 
     print("Escribe tu numero celular: ", end="")        
-    numero = "whatsapp:+521" + input()
+    numero = "whatsapp:" + input()
 
     print("Escribe tu nombre: ", end="")
     nombre = input()
