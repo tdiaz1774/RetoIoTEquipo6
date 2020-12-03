@@ -1,6 +1,7 @@
 
 import serial
 import db_connector as db
+import config
 
 
 def readHRData(number):
@@ -9,21 +10,21 @@ def readHRData(number):
     """
     try:
 
-        ser = serial.Serial('COM3', 9600, timeout=2)
+        ser = serial.Serial(config.PORT, 9600, timeout=2)
 
         while True:
 
-            data = (int(ser.readline().decode("utf-8")))
+            data = ser.readline().decode("utf-8")
 
-            if data:
-                print(data)
+            if data != '':
+                data = int(data)
                 if db.checkDataBase():
                     db.insertHR(number, data)
                 else:
                     db.createDataBase()
                     db.insertHR(number, data)
             else:
-                break
+                pass
 
     except Exception as e:
         print(f"Occurrio un error! \n{e}")
@@ -35,21 +36,21 @@ def readSpo2Data(number):
     """
     try:
 
-        ser = serial.Serial('COM3', 9600, timeout=2)
+        ser = serial.Serial(config.PORT, 9600, timeout=2)
 
         while True:
 
-            data = (int(ser.readline().decode("utf-8")))
+            data = ser.readline().decode("utf-8")
 
-            if data:
-                print(data)
+            if data  != '':
+                data = int(data)
                 if db.checkDataBase():
                     db.insertSpo2(number, data)
                 else:
                     db.createDataBase()
                     db.insertSpo2(number, data)
             else:
-                break
+                pass
 
     except Exception as e:
         print(f"Occurrio un error! \n{e}")
